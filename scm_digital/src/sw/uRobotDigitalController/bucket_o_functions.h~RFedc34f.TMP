@@ -1,0 +1,14 @@
+void LC_FREQCHANGE(char coarse, char mid, char fine);
+void LC_monotonic(int LCcode);
+
+void GPIO_test(void);
+
+void divProgram(unsigned int div_ratio, unsigned int reset, unsigned int enable);
+
+unsigned char flipChar(unsigned char b);
+void gen_ble_packet(unsigned char *packet, unsigned char *AdvA, double tempC);
+void test_ble_packet(void);
+void transmit_ble_packet(unsigned char *packet);
+void resetBLE(void);
+void enable_ble_module(void);
+void disable_ble_module(void);

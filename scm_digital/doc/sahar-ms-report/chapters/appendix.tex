@@ -1,0 +1,22 @@
+\section{\texttt{AHBLiteArbiter\_V2} State Transition Table} \label{appendix:arb-fsm}
+This table lists all possible combinations of inputs and state for \texttt{AHBLiteArbiter\_V2}, and lists the next state for each combination as well as any actions that must be taken. The names of the columns are abbreviated versions of the signals in \texttt{AHBLiteArbiter\_V2} and are described below:
+
+\begin{description}
+	\item[current\_aphase] This column corresponds to the \texttt{current\_address\_phase} signal. The possible values in the column are PASS\_M0, LATCH\_M0, and LATCH\_M1. These three values correspond with the three address phase states.
+	\item[current\_dphase] This column corresponds to the \texttt{current\_data\_phase} signal. The possible values in the column are NONE, M0, and M1. These three values correspond with the three data phase states.
+	\item[latched\_M1] This column corresponds to the \texttt{inputs\_latched\_M1} signal. The possible values are 0 and 1.
+	\item[req\_M1] This column represents the \texttt{req\_M1} signal. The possible values are 0 and 1.
+	\item[latched\_M0] This column corresponds to the \texttt{inputs\_latched\_M0} signal. The possible values are 0 and 1.
+	\item[req\_M0] This column represents the \texttt{req\_M0} signal. The possible values are 0 and 1.
+	\item[HREADY] This column represents the \texttt{HREADYOUT\_S} signal. The possible values are 0 and 1.
+	\item[next\_aphase] This column corresponds to the \texttt{next\_address\_phase} signal. The possible values in the column are PASS\_M0, LATCH\_M0, and LATCH\_M1. These three values correspond with the three address phase states. If this column is blank, then the combination of state and inputs is invalid.
+	\item[next\_dphase] This column corresponds to the \texttt{next\_data\_phase} signal. The possible values in the column are NONE, M0, and M1. These three values correspond with the three data phase states. If this column is blank, then the combination of state and inputs is invalid.
+	\item[notes/actions] This column is used to indicate whether a combination of state and inputs is invalid or if there are any actions that must be taken based on this combination of state and inputs. The possible actions are to latch or clear the address phase signals from M0 or M1. These correspond to the \texttt{latch\_M0}, \texttt{latch\_M1}, \texttt{clr\_M0}, and \texttt{clr\_M1} signals.
+\end{description}
+
+\setlength{\LTleft}{-20cm plus -1fill}
+\setlength{\LTright}{\LTleft}
+\tiny\csvautolongtable[respect all]{chapters/arb-fsm.csv}
+
+
+

@@ -1,0 +1,289 @@
+current_aphase,current_dphase,latched_M1,req_M1,latched_M0,req_M0,HREADY,next_aphase,next_dphase,notes/actions
+PASS_M0,NONE,0,0,0,0,0,PASS_M0,NONE,
+PASS_M0,NONE,0,0,0,0,1,PASS_M0,NONE,
+PASS_M0,NONE,0,0,0,1,0,PASS_M0,M0,
+PASS_M0,NONE,0,0,0,1,1,PASS_M0,M0,
+PASS_M0,NONE,0,0,1,0,0,,,invalid state
+PASS_M0,NONE,0,0,1,0,1,,,invalid state
+PASS_M0,NONE,0,0,1,1,0,,,invalid state
+PASS_M0,NONE,0,0,1,1,1,,,invalid state
+PASS_M0,NONE,0,1,0,0,0,LATCH_M1,NONE,latch M1 signals
+PASS_M0,NONE,0,1,0,0,1,LATCH_M1,NONE,latch M1 signals
+PASS_M0,NONE,0,1,0,1,0,LATCH_M1,M0,latch M1 signals
+PASS_M0,NONE,0,1,0,1,1,LATCH_M1,M0,latch M1 signals
+PASS_M0,NONE,0,1,1,0,0,,,invalid state
+PASS_M0,NONE,0,1,1,0,1,,,invalid state
+PASS_M0,NONE,0,1,1,1,0,,,invalid state
+PASS_M0,NONE,0,1,1,1,1,,,invalid state
+PASS_M0,NONE,1,0,0,0,0,,,invalid state
+PASS_M0,NONE,1,0,0,0,1,,,invalid state
+PASS_M0,NONE,1,0,0,1,0,,,invalid state
+PASS_M0,NONE,1,0,0,1,1,,,invalid state
+PASS_M0,NONE,1,0,1,0,0,,,invalid state
+PASS_M0,NONE,1,0,1,0,1,,,invalid state
+PASS_M0,NONE,1,0,1,1,0,,,invalid state
+PASS_M0,NONE,1,0,1,1,1,,,invalid state
+PASS_M0,NONE,1,1,0,0,0,,,invalid state
+PASS_M0,NONE,1,1,0,0,1,,,invalid state
+PASS_M0,NONE,1,1,0,1,0,,,invalid state
+PASS_M0,NONE,1,1,0,1,1,,,invalid state
+PASS_M0,NONE,1,1,1,0,0,,,invalid state
+PASS_M0,NONE,1,1,1,0,1,,,invalid state
+PASS_M0,NONE,1,1,1,1,0,,,invalid state
+PASS_M0,NONE,1,1,1,1,1,,,invalid state
+PASS_M0,M0,0,0,0,0,0,PASS_M0,M0,
+PASS_M0,M0,0,0,0,0,1,PASS_M0,NONE,
+PASS_M0,M0,0,0,0,1,0,LATCH_M0,M0,latch M0 signals
+PASS_M0,M0,0,0,0,1,1,PASS_M0,M0,
+PASS_M0,M0,0,0,1,0,0,,,invalid state
+PASS_M0,M0,0,0,1,0,1,,,invalid state
+PASS_M0,M0,0,0,1,1,0,,,invalid state
+PASS_M0,M0,0,0,1,1,1,,,invalid state
+PASS_M0,M0,0,1,0,0,0,LATCH_M1,M0,latch M1 signals
+PASS_M0,M0,0,1,0,0,1,LATCH_M1,NONE,latch M1 signals
+PASS_M0,M0,0,1,0,1,0,LATCH_M0,M0,latch M0 and M1 signals
+PASS_M0,M0,0,1,0,1,1,LATCH_M1,M0,latch M1 signals
+PASS_M0,M0,0,1,1,0,0,,,invalid state
+PASS_M0,M0,0,1,1,0,1,,,invalid state
+PASS_M0,M0,0,1,1,1,0,,,invalid state
+PASS_M0,M0,0,1,1,1,1,,,invalid state
+PASS_M0,M0,1,0,0,0,0,,,invalid state
+PASS_M0,M0,1,0,0,0,1,,,invalid state
+PASS_M0,M0,1,0,0,1,0,,,invalid state
+PASS_M0,M0,1,0,0,1,1,,,invalid state
+PASS_M0,M0,1,0,1,0,0,,,invalid state
+PASS_M0,M0,1,0,1,0,1,,,invalid state
+PASS_M0,M0,1,0,1,1,0,,,invalid state
+PASS_M0,M0,1,0,1,1,1,,,invalid state
+PASS_M0,M0,1,1,0,0,0,,,invalid state
+PASS_M0,M0,1,1,0,0,1,,,invalid state
+PASS_M0,M0,1,1,0,1,0,,,invalid state
+PASS_M0,M0,1,1,0,1,1,,,invalid state
+PASS_M0,M0,1,1,1,0,0,,,invalid state
+PASS_M0,M0,1,1,1,0,1,,,invalid state
+PASS_M0,M0,1,1,1,1,0,,,invalid state
+PASS_M0,M0,1,1,1,1,1,,,invalid state
+PASS_M0,M1,0,0,0,0,0,PASS_M0,M1,
+PASS_M0,M1,0,0,0,0,1,PASS_M0,NONE,
+PASS_M0,M1,0,0,0,1,0,LATCH_M0,M1,latch M0 signals
+PASS_M0,M1,0,0,0,1,1,PASS_M0,M0,
+PASS_M0,M1,0,0,1,0,0,,,invalid state
+PASS_M0,M1,0,0,1,0,1,,,invalid state
+PASS_M0,M1,0,0,1,1,0,,,invalid state
+PASS_M0,M1,0,0,1,1,1,,,invalid state
+PASS_M0,M1,0,1,0,0,0,LATCH_M1,M1,latch M1 signals
+PASS_M0,M1,0,1,0,0,1,LATCH_M1,NONE,latch M1 signals
+PASS_M0,M1,0,1,0,1,0,LATCH_M0,M1,latch M0 and M1 signals
+PASS_M0,M1,0,1,0,1,1,LATCH_M1,M0,latch M1 signals
+PASS_M0,M1,0,1,1,0,0,,,invalid state
+PASS_M0,M1,0,1,1,0,1,,,invalid state
+PASS_M0,M1,0,1,1,1,0,,,invalid state
+PASS_M0,M1,0,1,1,1,1,,,invalid state
+PASS_M0,M1,1,0,0,0,0,,,invalid state
+PASS_M0,M1,1,0,0,0,1,,,invalid state
+PASS_M0,M1,1,0,0,1,0,,,invalid state
+PASS_M0,M1,1,0,0,1,1,,,invalid state
+PASS_M0,M1,1,0,1,0,0,,,invalid state
+PASS_M0,M1,1,0,1,0,1,,,invalid state
+PASS_M0,M1,1,0,1,1,0,,,invalid state
+PASS_M0,M1,1,0,1,1,1,,,invalid state
+PASS_M0,M1,1,1,0,0,0,,,invalid state
+PASS_M0,M1,1,1,0,0,1,,,invalid state
+PASS_M0,M1,1,1,0,1,0,,,invalid state
+PASS_M0,M1,1,1,0,1,1,,,invalid state
+PASS_M0,M1,1,1,1,0,0,,,invalid state
+PASS_M0,M1,1,1,1,0,1,,,invalid state
+PASS_M0,M1,1,1,1,1,0,,,invalid state
+PASS_M0,M1,1,1,1,1,1,,,invalid state
+LATCH_M0,NONE,0,0,0,0,0,,,invalid state
+LATCH_M0,NONE,0,0,0,0,1,,,invalid state
+LATCH_M0,NONE,0,0,0,1,0,,,invalid state
+LATCH_M0,NONE,0,0,0,1,1,,,invalid state
+LATCH_M0,NONE,0,0,1,0,0,PASS_M0,M0,clear M0 signals
+LATCH_M0,NONE,0,0,1,0,1,PASS_M0,M0,clear M0 signals
+LATCH_M0,NONE,0,0,1,1,0,LATCH_M0,M0,latch M0 signals
+LATCH_M0,NONE,0,0,1,1,1,LATCH_M0,M0,latch M0 signals
+LATCH_M0,NONE,0,1,0,0,0,,,invalid state
+LATCH_M0,NONE,0,1,0,0,1,,,invalid state
+LATCH_M0,NONE,0,1,0,1,0,,,invalid state
+LATCH_M0,NONE,0,1,0,1,1,,,invalid state
+LATCH_M0,NONE,0,1,1,0,0,LATCH_M1,M0,clear M0 signals latch M1 signals
+LATCH_M0,NONE,0,1,1,0,1,LATCH_M1,M0,clear M0 signals latch M1 signals
+LATCH_M0,NONE,0,1,1,1,0,LATCH_M1,M0,latch M0 and M1 signals
+LATCH_M0,NONE,0,1,1,1,1,LATCH_M1,M0,latch M0 and M1 signals
+LATCH_M0,NONE,1,0,0,0,0,,,invalid state
+LATCH_M0,NONE,1,0,0,0,1,,,invalid state
+LATCH_M0,NONE,1,0,0,1,0,,,invalid state
+LATCH_M0,NONE,1,0,0,1,1,,,invalid state
+LATCH_M0,NONE,1,0,1,0,0,LATCH_M1,M0,clear M0 signals
+LATCH_M0,NONE,1,0,1,0,1,LATCH_M1,M0,clear M0 signals
+LATCH_M0,NONE,1,0,1,1,0,LATCH_M1,M0,latch M0 signals
+LATCH_M0,NONE,1,0,1,1,1,LATCH_M1,M0,latch M0 signals
+LATCH_M0,NONE,1,1,0,0,0,,,invalid state
+LATCH_M0,NONE,1,1,0,0,1,,,invalid state
+LATCH_M0,NONE,1,1,0,1,0,,,invalid state
+LATCH_M0,NONE,1,1,0,1,1,,,invalid state
+LATCH_M0,NONE,1,1,1,0,0,LATCH_M1,M0,clear M0 signals
+LATCH_M0,NONE,1,1,1,0,1,LATCH_M1,M0,clear M0 signals
+LATCH_M0,NONE,1,1,1,1,0,LATCH_M1,M0,latch M0 signals
+LATCH_M0,NONE,1,1,1,1,1,LATCH_M1,M0,latch M0 signals
+LATCH_M0,M0,0,0,0,0,0,,,invalid state
+LATCH_M0,M0,0,0,0,0,1,,,invalid state
+LATCH_M0,M0,0,0,0,1,0,,,invalid state
+LATCH_M0,M0,0,0,0,1,1,,,invalid state
+LATCH_M0,M0,0,0,1,0,0,LATCH_M0,M0,
+LATCH_M0,M0,0,0,1,0,1,PASS_M0,M0,clear M0 signals
+LATCH_M0,M0,0,0,1,1,0,LATCH_M0,M0,
+LATCH_M0,M0,0,0,1,1,1,PASS_M0,M0,clear M0 signals
+LATCH_M0,M0,0,1,0,0,0,,,invalid state
+LATCH_M0,M0,0,1,0,0,1,,,invalid state
+LATCH_M0,M0,0,1,0,1,0,,,invalid state
+LATCH_M0,M0,0,1,0,1,1,,,invalid state
+LATCH_M0,M0,0,1,1,0,0,LATCH_M0,M0,latch M1 signals
+LATCH_M0,M0,0,1,1,0,1,LATCH_M1,M0,clear M0 signals latch M1 signals
+LATCH_M0,M0,0,1,1,1,0,LATCH_M0,M0,latch M1 signals
+LATCH_M0,M0,0,1,1,1,1,LATCH_M1,M0,clear M0 signals latch M1 signals
+LATCH_M0,M0,1,0,0,0,0,,,invalid state
+LATCH_M0,M0,1,0,0,0,1,,,invalid state
+LATCH_M0,M0,1,0,0,1,0,,,invalid state
+LATCH_M0,M0,1,0,0,1,1,,,invalid state
+LATCH_M0,M0,1,0,1,0,0,LATCH_M0,M0,
+LATCH_M0,M0,1,0,1,0,1,LATCH_M1,M0,clear M0 signals
+LATCH_M0,M0,1,0,1,1,0,LATCH_M0,M0,
+LATCH_M0,M0,1,0,1,1,1,LATCH_M1,M0,clear M0 signals
+LATCH_M0,M0,1,1,0,0,0,,,invalid state
+LATCH_M0,M0,1,1,0,0,1,,,invalid state
+LATCH_M0,M0,1,1,0,1,0,,,invalid state
+LATCH_M0,M0,1,1,0,1,1,,,invalid state
+LATCH_M0,M0,1,1,1,0,0,LATCH_M0,M0,
+LATCH_M0,M0,1,1,1,0,1,LATCH_M1,M0,clear M0 signals
+LATCH_M0,M0,1,1,1,1,0,LATCH_M0,M0,
+LATCH_M0,M0,1,1,1,1,1,LATCH_M1,M0,clear M0 signals
+LATCH_M0,M1,0,0,0,0,0,,,invalid state
+LATCH_M0,M1,0,0,0,0,1,,,invalid state
+LATCH_M0,M1,0,0,0,1,0,,,invalid state
+LATCH_M0,M1,0,0,0,1,1,,,invalid state
+LATCH_M0,M1,0,0,1,0,0,LATCH_M0,M1,
+LATCH_M0,M1,0,0,1,0,1,PASS_M0,M0,clear M0 signals
+LATCH_M0,M1,0,0,1,1,0,LATCH_M0,M1,
+LATCH_M0,M1,0,0,1,1,1,LATCH_M0,M0,latch M0 signals
+LATCH_M0,M1,0,1,0,0,0,,,invalid state
+LATCH_M0,M1,0,1,0,0,1,,,invalid state
+LATCH_M0,M1,0,1,0,1,0,,,invalid state
+LATCH_M0,M1,0,1,0,1,1,,,invalid state
+LATCH_M0,M1,0,1,1,0,0,LATCH_M0,M1,latch M1 signals
+LATCH_M0,M1,0,1,1,0,1,LATCH_M1,M0,clear M0 signals latch M1 signals
+LATCH_M0,M1,0,1,1,1,0,LATCH_M0,M1,latch M1 signals
+LATCH_M0,M1,0,1,1,1,1,LATCH_M1,M0,latch M0 and M1 signals
+LATCH_M0,M1,1,0,0,0,0,,,invalid state
+LATCH_M0,M1,1,0,0,0,1,,,invalid state
+LATCH_M0,M1,1,0,0,1,0,,,invalid state
+LATCH_M0,M1,1,0,0,1,1,,,invalid state
+LATCH_M0,M1,1,0,1,0,0,LATCH_M0,M1,
+LATCH_M0,M1,1,0,1,0,1,LATCH_M1,M0,clear M0 signals
+LATCH_M0,M1,1,0,1,1,0,LATCH_M0,M1,
+LATCH_M0,M1,1,0,1,1,1,LATCH_M1,M0,latch M0 signals
+LATCH_M0,M1,1,1,0,0,0,,,invalid state
+LATCH_M0,M1,1,1,0,0,1,,,invalid state
+LATCH_M0,M1,1,1,0,1,0,,,invalid state
+LATCH_M0,M1,1,1,0,1,1,,,invalid state
+LATCH_M0,M1,1,1,1,0,0,LATCH_M0,M1,
+LATCH_M0,M1,1,1,1,0,1,LATCH_M1,M0,clear M0 signals
+LATCH_M0,M1,1,1,1,1,0,LATCH_M0,M1,
+LATCH_M0,M1,1,1,1,1,1,LATCH_M1,M0,latch M0 signals
+LATCH_M1,NONE,0,0,0,0,0,,,invalid state
+LATCH_M1,NONE,0,0,0,0,1,,,invalid state
+LATCH_M1,NONE,0,0,0,1,0,,,invalid state
+LATCH_M1,NONE,0,0,0,1,1,,,invalid state
+LATCH_M1,NONE,0,0,1,0,0,,,invalid state
+LATCH_M1,NONE,0,0,1,0,1,,,invalid state
+LATCH_M1,NONE,0,0,1,1,0,,,invalid state
+LATCH_M1,NONE,0,0,1,1,1,,,invalid state
+LATCH_M1,NONE,0,1,0,0,0,,,invalid state
+LATCH_M1,NONE,0,1,0,0,1,,,invalid state
+LATCH_M1,NONE,0,1,0,1,0,,,invalid state
+LATCH_M1,NONE,0,1,0,1,1,,,invalid state
+LATCH_M1,NONE,0,1,1,0,0,,,invalid state
+LATCH_M1,NONE,0,1,1,0,1,,,invalid state
+LATCH_M1,NONE,0,1,1,1,0,,,invalid state
+LATCH_M1,NONE,0,1,1,1,1,,,invalid state
+LATCH_M1,NONE,1,0,0,0,0,PASS_M0,M1,clear M1 signals
+LATCH_M1,NONE,1,0,0,0,1,PASS_M0,M1,clear M1 signals
+LATCH_M1,NONE,1,0,0,1,0,LATCH_M0,M1,latch M0 signals clear M1 signals
+LATCH_M1,NONE,1,0,0,1,1,LATCH_M0,M1,latch M0 signals clear M1 signals
+LATCH_M1,NONE,1,0,1,0,0,LATCH_M0,M1,clear M1 signals
+LATCH_M1,NONE,1,0,1,0,1,LATCH_M0,M1,clear M1 signals
+LATCH_M1,NONE,1,0,1,1,0,LATCH_M0,M1,clear M1 signals
+LATCH_M1,NONE,1,0,1,1,1,LATCH_M0,M1,clear M1 signals
+LATCH_M1,NONE,1,1,0,0,0,LATCH_M1,M1,latch M1 signals
+LATCH_M1,NONE,1,1,0,0,1,LATCH_M1,M1,latch M1 signals
+LATCH_M1,NONE,1,1,0,1,0,LATCH_M0,M1,latch M0 and M1 signals
+LATCH_M1,NONE,1,1,0,1,1,LATCH_M0,M1,latch M0 and M1 signals
+LATCH_M1,NONE,1,1,1,0,0,LATCH_M0,M1,latch M1 signals
+LATCH_M1,NONE,1,1,1,0,1,LATCH_M0,M1,latch M1 signals
+LATCH_M1,NONE,1,1,1,1,0,LATCH_M0,M1,latch M1 signals
+LATCH_M1,NONE,1,1,1,1,1,LATCH_M0,M1,latch M1 signals
+LATCH_M1,M0,0,0,0,0,0,,,invalid state
+LATCH_M1,M0,0,0,0,0,1,,,invalid state
+LATCH_M1,M0,0,0,0,1,0,,,invalid state
+LATCH_M1,M0,0,0,0,1,1,,,invalid state
+LATCH_M1,M0,0,0,1,0,0,,,invalid state
+LATCH_M1,M0,0,0,1,0,1,,,invalid state
+LATCH_M1,M0,0,0,1,1,0,,,invalid state
+LATCH_M1,M0,0,0,1,1,1,,,invalid state
+LATCH_M1,M0,0,1,0,0,0,,,invalid state
+LATCH_M1,M0,0,1,0,0,1,,,invalid state
+LATCH_M1,M0,0,1,0,1,0,,,invalid state
+LATCH_M1,M0,0,1,0,1,1,,,invalid state
+LATCH_M1,M0,0,1,1,0,0,,,invalid state
+LATCH_M1,M0,0,1,1,0,1,,,invalid state
+LATCH_M1,M0,0,1,1,1,0,,,invalid state
+LATCH_M1,M0,0,1,1,1,1,,,invalid state
+LATCH_M1,M0,1,0,0,0,0,LATCH_M1,M0,
+LATCH_M1,M0,1,0,0,0,1,PASS_M0,M1,clear M1 signals
+LATCH_M1,M0,1,0,0,1,0,LATCH_M1,M0,latch M0 signals
+LATCH_M1,M0,1,0,0,1,1,LATCH_M0,M1,latch M0 signals clear M1 signals
+LATCH_M1,M0,1,0,1,0,0,LATCH_M1,M0,
+LATCH_M1,M0,1,0,1,0,1,LATCH_M0,M1,clear M1 signals
+LATCH_M1,M0,1,0,1,1,0,LATCH_M1,M0,
+LATCH_M1,M0,1,0,1,1,1,LATCH_M0,M1,clear M1 signals
+LATCH_M1,M0,1,1,0,0,0,LATCH_M1,M0,
+LATCH_M1,M0,1,1,0,0,1,LATCH_M1,M1,latch M1 signals
+LATCH_M1,M0,1,1,0,1,0,LATCH_M1,M0,latch M0 signals
+LATCH_M1,M0,1,1,0,1,1,LATCH_M0,M1,latch M0 and M1 signals
+LATCH_M1,M0,1,1,1,0,0,LATCH_M1,M0,
+LATCH_M1,M0,1,1,1,0,1,LATCH_M0,M1,latch M1 signals
+LATCH_M1,M0,1,1,1,1,0,LATCH_M1,M0,
+LATCH_M1,M0,1,1,1,1,1,LATCH_M0,M1,latch M1 signals
+LATCH_M1,M1,0,0,0,0,0,,,invalid state
+LATCH_M1,M1,0,0,0,0,1,,,invalid state
+LATCH_M1,M1,0,0,0,1,0,,,invalid state
+LATCH_M1,M1,0,0,0,1,1,,,invalid state
+LATCH_M1,M1,0,0,1,0,0,,,invalid state
+LATCH_M1,M1,0,0,1,0,1,,,invalid state
+LATCH_M1,M1,0,0,1,1,0,,,invalid state
+LATCH_M1,M1,0,0,1,1,1,,,invalid state
+LATCH_M1,M1,0,1,0,0,0,,,invalid state
+LATCH_M1,M1,0,1,0,0,1,,,invalid state
+LATCH_M1,M1,0,1,0,1,0,,,invalid state
+LATCH_M1,M1,0,1,0,1,1,,,invalid state
+LATCH_M1,M1,0,1,1,0,0,,,invalid state
+LATCH_M1,M1,0,1,1,0,1,,,invalid state
+LATCH_M1,M1,0,1,1,1,0,,,invalid state
+LATCH_M1,M1,0,1,1,1,1,,,invalid state
+LATCH_M1,M1,1,0,0,0,0,LATCH_M1,M1,
+LATCH_M1,M1,1,0,0,0,1,PASS_M0,M1,clear M1 signals
+LATCH_M1,M1,1,0,0,1,0,LATCH_M1,M1,latch M0 signals
+LATCH_M1,M1,1,0,0,1,1,LATCH_M0,M1,latch M0 signals clear M1 signals
+LATCH_M1,M1,1,0,1,0,0,LATCH_M1,M1,
+LATCH_M1,M1,1,0,1,0,1,LATCH_M0,M1,clear M1 signals
+LATCH_M1,M1,1,0,1,1,0,LATCH_M1,M1,
+LATCH_M1,M1,1,0,1,1,1,LATCH_M0,M1,clear M1 signals
+LATCH_M1,M1,1,1,0,0,0,LATCH_M1,M1,
+LATCH_M1,M1,1,1,0,0,1,PASS_M0,M1,clear M1 signals
+LATCH_M1,M1,1,1,0,1,0,LATCH_M1,M1,latch M0 signals
+LATCH_M1,M1,1,1,0,1,1,LATCH_M0,M1,latch M0 signals clear M1 signals
+LATCH_M1,M1,1,1,1,0,0,LATCH_M1,M1,
+LATCH_M1,M1,1,1,1,0,1,LATCH_M0,M1,clear M1 signals
+LATCH_M1,M1,1,1,1,1,0,LATCH_M1,M1,
+LATCH_M1,M1,1,1,1,1,1,LATCH_M0,M1,clear M1 signals

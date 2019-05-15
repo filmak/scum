@@ -1,0 +1,532 @@
+%\begin{register}{H}{}{0x}
+%	\label{reg:}
+%	\regfield{}{}{}{}
+%	\reglabel{Reset}\regnewline
+%	\begin{regdesc}[1\textwidth]\begin{reglist}
+%		\footnotesize
+%		\item[] 
+%	\end{reglist}\end{regdesc}	
+%\end{register}
+
+%<*bootloader-registers>
+\begin{register}{H}{BOOTLOADER\_REG\_\_CFG}{0x010F00000}
+	\label{reg:bootloader-reg-cfg}
+	\regfieldb{next\_imem\_mode}{1}{2}
+	\regfieldb{boot\_mode}{2}{0}
+	\regnewline
+	\begin{regdesc}[1\textwidth]\begin{reglist}
+		\footnotesize
+		\item[boot\_mode] (Write-only) Bootloader data source. 00 = 01 = NONE, 10 = 3WB, and 11 = AHB.
+		\item[next\_imem\_mode] (Write-only) Instruction data source. 0 = ROM and 1 = RAM.
+	\end{reglist}\end{regdesc}	
+\end{register}
+
+\begin{register}{H}{BOOTLOADER\_REG\_\_STATUS}{0x010F00004}
+	\label{reg:bootloader-reg-status}
+	\regfield{boot\_3wb\_done}{1}{4}{0}
+	\regfield{boot\_mode}{2}{2}{00}
+	\regfield{next\_imem\_mode}{1}{1}{0}
+	\regfield{imem\_mode}{1}{0}{0}
+	\reglabel{Reset}\regnewline
+	\begin{regdesc}[1\textwidth]\begin{reglist}
+		\footnotesize
+		\item[imem\_mode] Instruction data source. 0 = ROM and 1 = RAM.
+		\item[next\_imem\_mode] Instruction data source after next soft reset. 0 = ROM and 1 = RAM.
+		\item[boot\_mode] Bootloader data source. 00 = 01 = NONE, 10 = 3WB, and 11 = AHB.
+		\item[boot\_3wb\_done] Booting through the 3 Wire Bus is finished. 0 = not done and 1 = done.
+	\end{reglist}\end{regdesc}	
+\end{register}
+%</bootloader-registers>
+
+%<*dma-registers>
+\begin{register}{H}{DMA\_REG\_\_RF\_RX\_ADDR}{0x41000014}
+	\label{reg:dma-reg-rf-rx-addr}
+	\regfield{RF\_RX\_ADDR}{32}{0}{00000000000000000000000000000000}
+	\reglabel{Reset}\regnewline
+	\begin{regdesc}[1\textwidth]\begin{reglist}
+		\footnotesize
+		\item[RF\_RX\_ADDR] Address in data memory where received packet data is stored.
+	\end{reglist}\end{regdesc}
+\end{register}
+%</dma-registers>
+
+%<*rfcontroller-registers>
+\begin{register}{H}{RFCONTROLLER\_REG\_\_CONTROL}{0x40000000}
+	\label{reg:rfcontroller-reg-control}
+	\regfieldb{RF\_RESET}{1}{4}
+	\regfieldb{RX\_STOP}{1}{3}
+	\regfieldb{RX\_START}{1}{2}
+	\regfieldb{TX\_SEND}{1}{1}
+	\regfieldb{TX\_LOAD}{1}{0}
+	\regnewline
+	\begin{regdesc}[1\textwidth]\begin{reglist}
+		\footnotesize
+		\item[TX\_LOAD] (Write-Only) Triggers the TX state machine to load packet data into TX FIFO. 0 = no load and 1 = load.
+		\item[TX\_SEND] (Write-Only) Triggers the TX state machine to send packet data in the TX FIFO. 0 = no send and 1 = send.
+		\item[RX\_START] (Write-Only) Triggers the RX state machine to listen for incoming packets. 0 = no start and 1 = start.
+		\item[RX\_STOP] (Write-Only) Stops the RX state machine from listening to incoming packets. 0 = no stop and 1 = stop.
+		\item[RF\_RESET] (Write-Only) Resets the mode select, TX, and RX state machines. 0 = no reset and 1 = reset.
+	\end{reglist}\end{regdesc}	
+\end{register}
+
+\begin{register}{H}{RFCONTROLLER\_REG\_\_STATUS}{0x40000004}
+	\label{reg:rfcontroller-reg-status}
+	\regfield{RX\_STATE}{4}{6}{0000}
+	\regfield{TX\_STATE}{4}{2}{0000}
+	\regfield{MODE}{2}{0}{00}
+	\reglabel{Reset}\regnewline
+	\begin{regdesc}[1\textwidth]\begin{reglist}
+		\footnotesize
+		\item[MODE] (Read-Only) State of the mode select state machine. See Figure \ref{table:modes} for state encodings.
+		\item[TX\_MODE] (Read-Only) State of the TX state machine. See Figure \ref{table:tx-states} for state encodings.
+		\item[RX\_MODE] (Read-Only) State of the RX state machine. See Figure \ref{table:rx-states} for state encodings.
+	\end{reglist}\end{regdesc}	
+\end{register}
+
+\begin{register}{H}{RFCONTROLLER\_REG\_\_TX\_DATA\_ADDR}{0x40000008}
+	\label{reg:rfcontroller-reg-tx-data-addr}
+	\regfield{TX\_DATA\_ADDR}{32}{0}{00000000000000000000000000000000}
+	\reglabel{Reset}\regnewline
+	\begin{regdesc}[1\textwidth]\begin{reglist}
+		\footnotesize
+		\item[TX\_DATA\_ADDR] Address pointing to the beginning of the packet data to transmit.
+	\end{reglist}\end{regdesc}	
+\end{register}
+	
+\begin{register}{H}{RFCONTROLLER\_REG\_\_TX\_PACK\_LEN}{0x4000000C}
+	\label{reg:rfcontroller-reg-tx-pack-len}
+	\regfield{TX\_PACK\_LEN}{7}{0}{0000000}
+	\reglabel{Reset}\regnewline
+	\begin{regdesc}[1\textwidth]\begin{reglist}
+		\footnotesize
+		\item[TX\_PACK\_LEN] Length of the packet to transmit.
+	\end{reglist}\end{regdesc}	
+\end{register}
+	
+\begin{register}{H}{RFCONTROLLER\_REG\_\_INT}{0x40000010}
+	\label{reg:rfcontroller-reg-int}
+	\regfield{RX\_DONE\_INT}{1}{4}{0}
+	\regfield{RX\_SFD\_DONE\_INT}{1}{3}{0}
+	\regfield{TX\_SEND\_DONE\_INT}{1}{2}{0}
+	\regfield{TX\_SFD\_DONE\_INT}{1}{1}{0}
+	\regfield{TX\_LOAD\_DONE\_INT}{1}{0}{0}
+	\reglabel{Reset}\regnewline
+	\begin{regdesc}[1\textwidth]\begin{reglist}
+		\footnotesize
+		\item[TX\_LOAD\_DONE\_INT] (Read-Only) TX load done interrupt flag. 0 = no interrupt pending and 1 = interrupt pending.
+		\item[TX\_SFD\_DONE\_INT] (Read-Only) TX SFD transmission done interrupt flag. 0 = no interrupt pending and 1 = interrupt pending.
+		\item[TX\_SEND\_DONE\_INT] (Read-Only) TX packet transmission done interrupt flag. 0 = no interrupt pending and 1 = interrupt pending.
+		\item[RX\_SFD\_DONE\_INT] (Read-Only) RX SFD detection interrupt flag. 0 = no interrupt pending and 1 = interrupt pending.
+		\item[RX\_DONE\_INT] (Read-Only) RX packet stored interrupt flag. 0 = no interrupt pending and 1 = interrupt pending.
+	\end{reglist}\end{regdesc}	
+\end{register}
+	
+\begin{register}{H}{RFCONTROLLER\_REG\_\_INT\_CONFIG}{0x40000014}
+	\label{reg:rfcontroller-reg-int-config}
+	\regfield{RX\_DONE\_INT\_MASK}{1}{14}{0}
+	\regfield{RX\_SFD\_DONE\_INT\_MASK}{1}{13}{0}
+	\regfield{TX\_SEND\_DONE\_INT\_MASK}{1}{12}{0}
+	\regfield{TX\_SFD\_DONE\_INT\_MASK}{1}{11}{0}
+	\regfield{TX\_LOAD\_DONE\_INT\_MASK}{1}{10}{0}
+	\regfield{RX\_DONE\_RFTIMER\_PULSE\_EN}{1}{9}{0}
+	\regfield{RX\_SFD\_DONE\_RFTIMER\_PULSE\_EN}{1}{8}{0}
+	\regfield{TX\_SEND\_DONE\_RFTIMER\_PULSE\_EN}{1}{7}{0}
+	\regfield{TX\_SFD\_DONE\_RFTIMER\_PULSE\_EN}{1}{6}{0}
+	\regfield{TX\_LOAD\_DONE\_RFTIMER\_PULSE\_EN}{1}{5}{0}
+	\regfield{RX\_DONE\_INT\_EN}{1}{4}{0}
+	\regfield{RX\_SFD\_DONE\_INT\_EN}{1}{3}{0}
+	\regfield{TX\_SEND\_DONE\_INT\_EN}{1}{2}{0}
+	\regfield{TX\_SFD\_DONE\_INT\_EN}{1}{1}{0}
+	\regfield{TX\_LOAD\_DONE\_INT\_EN}{1}{0}{0}
+	\reglabel{Reset}\regnewline
+	\begin{regdesc}[1\textwidth]\begin{reglist}
+		\footnotesize
+		\item[TX\_LOAD\_DONE\_INT\_EN] TX load done interrupt enable. 0 = disabled and 1 = enabled.
+		\item[TX\_SFD\_DONE\_INT\_EN] TX SFD transmission done interrupt enable. 0 = disabled and 1 = enabled.
+		\item[TX\_SEND\_DONE\_INT\_EN] TX packet transmission done interrupt enable. 0 = disabled and 1 = enabled.
+		\item[RX\_SFD\_DONE\_INT\_EN] RX SFD detection interrupt enable. 0 = disabled and 1 = enabled.
+		\item[RX\_DONE\_INT\_EN] RX packet stored interrupt enable. 0 = disabled and 1 = enabled.
+		\item[TX\_LOAD\_DONE\_RFTIMER\_PULSE\_EN] TX load done output pulse enable. 0 = disabled and 1 = enabled.
+		\item[TX\_SFD\_DONE\_RFTIMER\_PULSE\_EN] TX SFD transmission done output pulse enable. 0 = disabled and 1 = enabled.
+		\item[TX\_SEND\_DONE\_RFTIMER\_PULSE\_EN] TX packet transmission done output pulse enable. 0 = disabled and 1 = enabled.
+		\item[RX\_SFD\_DONE\_RFTIMER\_PULSE\_EN] RX SFD detection output pulse enable. 0 = disabled and 1 = enabled.
+		\item[RX\_DONE\_RFTIMER\_PULSE\_EN] RX packet stored output pulse enable. 0 = disabled and 1 = enabled.
+		\item[TX\_LOAD\_DONE\_INT\_MASK] TX load done interrupt mask. 0 = not masked and 1 = masked.
+		\item[TX\_SFD\_DONE\_INT\_MASK] TX SFD transmission done interrupt mask. 0 = not masked and 1 = masked.
+		\item[TX\_SEND\_DONE\_INT\_MASK] TX packet transmission done interrupt mask. 0 = not masked and 1 = masked.
+		\item[RX\_SFD\_DONE\_INT\_MASK] RX SFD detection interrupt mask. 0 = not masked and 1 = masked.
+		\item[RX\_DONE\_INT\_MASK] RX packet stored interrupt mask. 0 = not masked and 1 = masked.
+	\end{reglist}\end{regdesc}	
+\end{register}
+
+\begin{register}{H}{RFCONTROLLER\_REG\_\_INT\_CLEAR}{0x40000018}
+	\label{reg:rfcontroller-reg-int-clear}
+	\regfield{RX\_DONE\_INT\_CLEAR}{1}{4}{0}
+	\regfield{RX\_SFD\_DONE\_INT\_CLEAR}{1}{3}{0}
+	\regfield{TX\_SEND\_DONE\_INT\_CLEAR}{1}{2}{0}
+	\regfield{TX\_SFD\_DONE\_INT\_CLEAR}{1}{1}{0}
+	\regfield{TX\_LOAD\_DONE\_INT\_CLEAR}{1}{0}{0}
+	\reglabel{Reset}\regnewline
+	\begin{regdesc}[1\textwidth]\begin{reglist}
+		\footnotesize
+		\item[TX\_LOAD\_DONE\_INT\_CLEAR] (Write-Only) TX load done interrupt flag clear. 0 = flag unchanged and 1 = flag cleared.
+		\item[TX\_SFD\_DONE\_INT\_CLEAR] (Write-Only) TX SFD transmission done interrupt flag clear. 0 = flag unchanged and 1 = flag cleared.
+		\item[TX\_SEND\_DONE\_INT\_CLEAR] (Write-Only) TX packet transmission done interrupt flag clear. 0 = flag unchanged and 1 = flag cleared.
+		\item[RX\_SFD\_DONE\_INT\_CLEAR] (Write-Only) RX SFD detection interrupt flag clear. 0 = flag unchanged and 1 = flag cleared.
+		\item[RX\_DONE\_INT\_CLEAR] (Write-Only) RX packet stored interrupt flag clear. 0 = flag unchanged and 1 = flag cleared.
+	\end{reglist}\end{regdesc}	
+\end{register}
+	
+\begin{register}{H}{RFCONTROLLER\_REG\_\_ERROR}{0x4000001C}
+	\label{reg:rfcontroller-reg-error}
+	\regfield{RX\_CUTOFF\_ERROR}{1}{4}{0}
+	\regfield{RX\_CRC\_ERROR}{1}{3}{0}
+	\regfield{RX\_OVERFLOW\_ERROR}{1}{2}{0}
+	\regfield{TX\_CUTOFF\_ERROR}{1}{1}{0}
+	\regfield{TX\_OVERFLOW\_ERROR}{1}{0}{0}
+	\reglabel{Reset}\regnewline
+	\begin{regdesc}[1\textwidth]\begin{reglist}
+		\footnotesize
+		\item[TX\_OVERFLOW\_ERROR] (Read-Only) TX overflow error flag. 0 = no error pending and 1 = error pending.
+		\item[TX\_CUTOFF\_ERROR] (Read-Only) TX cutoff error flag. 0 = no error pending and 1 = error pending.
+		\item[RX\_OVERFLOW\_ERROR] (Read-Only) RX overflow error flag. 0 = no error pending and 1 = error pending.
+		\item[RX\_CRC\_ERROR] (Read-Only) RX CRC error flag. 0 = no error pending and 1 = error pending.
+		\item[RX\_CUTOFF\_ERROR] (Read-Only) RX cutoff error flag. 0 = no error pending and 1 = error pending.
+	\end{reglist}\end{regdesc}	
+\end{register}
+	
+\begin{register}{H}{RFCONTROLLER\_REG\_\_ERROR\_CONFIG}{0x40000020}
+	\label{reg:rfcontroller-reg-error-config}
+	\regfield{RX\_CUTOFF\_ERROR\_MASK}{1}{9}{0}
+	\regfield{RX\_CRC\_ERROR\_MASK}{1}{8}{0}
+	\regfield{RX\_OVERFLOW\_ERROR\_MASK}{1}{7}{0}
+	\regfield{TX\_CUTOFF\_ERROR\_MASK}{1}{6}{0}
+	\regfield{TX\_OVERFLOW\_ERROR\_MASK}{1}{5}{0}
+	\regfield{RX\_CUTOFF\_ERROR\_EN}{1}{4}{0}
+	\regfield{RX\_CRC\_ERROR\_EN}{1}{3}{0}
+	\regfield{RX\_OVERFLOW\_ERROR\_EN}{1}{2}{0}
+	\regfield{TX\_CUTOFF\_ERROR\_EN}{1}{1}{0}
+	\regfield{TX\_OVERFLOW\_ERROR\_EN}{1}{0}{0}
+	\reglabel{Reset}\regnewline
+	\begin{regdesc}[1\textwidth]\begin{reglist}
+		\footnotesize
+		\item[TX\_OVERFLOW\_ERROR\_EN] TX overflow error enable. 0 = disabled and 1 = enabled.
+		\item[TX\_CUTOFF\_ERROR\_EN] TX cutoff error enable. 0 = disabled and 1 = enabled.
+		\item[RX\_OVERFLOW\_ERROR\_EN] RX overflow error enable. 0 = disabled and 1 = enabled.
+		\item[RX\_CRC\_ERROR\_EN] RX CRC error enable. 0 = disabled and 1 = enabled.
+		\item[RX\_CUTOFF\_ERROR\_EN] RX cutoff error enable. 0 = disabled and 1 = enabled.
+		\item[TX\_OVERFLOW\_ERROR\_MASK] TX overflow error mask. 0 = not masked and 1 = masked.
+		\item[TX\_CUTOFF\_ERROR\_MASK] TX cutoff error mask. 0 = not masked and 1 = masked.
+		\item[RX\_OVERFLOW\_ERROR\_MASK] RX overflow error mask. 0 = not masked and 1 = masked.
+		\item[RX\_CRC\_ERROR\_MASK] RX CRC error mask. 0 = not masked and 1 = masked.
+		\item[RX\_CUTOFF\_ERROR\_MASK] RX cutoff error mask. 0 = not masked and 1 = masked.
+	\end{reglist}\end{regdesc}	
+\end{register}
+	
+\begin{register}{H}{RFCONTROLLER\_REG\_\_ERROR\_CLEAR}{0x40000024}
+	\label{reg:rfcontroller-reg-error-clear}
+	\regfield{RX\_CUTOFF\_ERROR\_CLEAR}{1}{4}{0}
+	\regfield{RX\_CRC\_ERROR\_CLEAR}{1}{3}{0}
+	\regfield{RX\_OVERFLOW\_ERROR\_CLEAR}{1}{2}{0}
+	\regfield{TX\_CUTOFF\_ERROR\_CLEAR}{1}{1}{0}
+	\regfield{TX\_OVERFLOW\_ERROR\_CLEAR}{1}{0}{0}
+	\reglabel{Reset}\regnewline
+	\begin{regdesc}[1\textwidth]\begin{reglist}
+		\footnotesize
+		\item[TX\_OVERFLOW\_ERROR\_CLEAR] (Write-Only) TX overflow error flag clear. 0 = flag unchanged and 1 = flag cleared.
+		\item[TX\_CUTOFF\_ERROR\_CLEAR] (Write-Only) TX cutoff error flag clear. 0 = flag unchanged and 1 = flag cleared.
+		\item[RX\_OVERFLOW\_ERROR\_CLEAR] (Write-Only) RX overflow error flag clear. 0 = flag unchanged and 1 = flag cleared.
+		\item[RX\_CRC\_ERROR\_CLEAR] (Write-Only) RX CRC error flag clear. 0 = flag unchanged and 1 = flag cleared.
+		\item[RX\_CUTOFF\_ERROR\_CLEAR] (Write-Only) RX cutoff error flag clear. 0 = flag unchanged and 1 = flag cleared.
+	\end{reglist}\end{regdesc}	
+\end{register}
+	
+\begin{register}{H}{RFCONTROLLER\_REG\_\_TX\_DATA\_DMA}{0x40000028}
+	\label{reg:rfcontroller-reg-tx-data-dma}
+	\regfield{TX\_DATA\_DMA}{32}{0}{0000000000000000000000000000000000000000}
+	\reglabel{Reset}\regnewline
+	\begin{regdesc}[1\textwidth]\begin{reglist}
+		\footnotesize
+		\item[TX\_DATA\_DMA] (Read-only) Address used by the DMA to fetch data for packet transmissions. THIS REGISTER IS EXCLUSIVELY FOR USE BY THE DMA.
+	\end{reglist}\end{regdesc}	
+\end{register}
+	
+\begin{register}{H}{RFCONTROLLER\_REG\_\_TX\_DATA\_ADDR\_DMA}{0x4000002C}
+	\label{reg:rfcontroller-reg-tx-data-addr-dma}
+	\regfield{TX\_DATA\_ADDR\_DMA}{32}{0}{00000000000000000000000000000000}
+	\reglabel{Reset}\regnewline
+	\begin{regdesc}[1\textwidth]\begin{reglist}
+		\footnotesize
+		\item[TX\_DATA\_ADDR\_DMA] Packet data for transmission, written by the DMA. Address used by the DMA to fetch data for packet transmissions. THIS REGISTER IS EXCLUSIVELY FOR USE BY THE DMA.
+	\end{reglist}\end{regdesc}	
+\end{register}
+	
+\begin{register}{H}{RFCONTROLLER\_REG\_\_RX\_DATA\_DMA}{0x40000030}
+	\label{reg:rfcontroller-reg-rx-data-dma}
+	\regfield{RX\_DATA\_DMA}{32}{0}{00000000000000000000000000000000}
+	\reglabel{Reset}\regnewline
+	\begin{regdesc}[1\textwidth]\begin{reglist}
+		\footnotesize
+			\item[RX\_DATA\_DMA] (Read-only) Received packet data, read and stored in the data memory by the DMA. THIS REGISTER IS EXCLUSIVELY FOR USE BY THE DMA.
+		\end{reglist}\end{regdesc}	
+	\end{register}
+%</rfcontroller-registers>
+
+%<*rftimer-registers>
+\begin{register}{H}{RFTIMER\_REG\_\_CONTROL}{0x42000000}
+	\label{reg:rftimer-reg-control}
+	\regfieldb{COUNT\_RESET}{1}{2}
+	\regfield{INTERRUPT\_ENABLE}{1}{1}{0}
+	\regfield{ENABLE}{1}{0}{0}
+	\reglabel{Reset}\regnewline
+	\begin{regdesc}[1\textwidth]\begin{reglist}
+		\footnotesize
+		\item[ENABLE] Counter enable. The value in the \texttt{RFTIMER\_REG\_\_COUNTER} increments when enabled. 0 = disabled and 1 = enabled.
+		\item[INTERRUPT\_ENABLE] Global interrupt enable. 0 = all interrupts disabled and 1 = interrupts enabled.
+		\item[COUNT\_RESET] (Write-only) Clears the \texttt{RFTIMER\_REG\_\_COUNTER} register. 0 = no clear and 1 = clear.
+	\end{reglist}\end{regdesc}	
+\end{register}
+
+\begin{register}{H}{RFTIMER\_REG\_\_COUNTER}{0x42000004}
+	\label{reg:rftimer-reg-counter}
+	\regfield{COUNT}{32}{0}{00000000000000000000000000000000}
+	\reglabel{Reset}\regnewline
+	\begin{regdesc}[1\textwidth]\begin{reglist}
+		\footnotesize
+		\item[COUNT] The counter for the timer.
+	\end{reglist}\end{regdesc}	
+\end{register}
+	
+\begin{register}{H}{RFTIMER\_REG\_\_MAX\_COUNT}{0x42000008}
+	\label{reg:rftimer-reg-max-count}
+	\regfield{MAX\_COUNT}{32}{0}{00000000000000000000000000000000}
+	\reglabel{Reset}\regnewline
+	\begin{regdesc}[1\textwidth]\begin{reglist}
+		\footnotesize
+		\item[MAX\_COUNT] Holds the maximum value for the counter register, \texttt{RFTIMER\_REG\_\_COUNTER}.
+	\end{reglist}\end{regdesc}	
+\end{register}
+	
+\begin{register}{H}{RFTIMER\_REG\_\_COMPAREi}{0x42000010 + i*0x04}
+	\label{reg:rftimer-reg-comparei}
+	\regfield{COMPAREi}{32}{0}{00000000000000000000000000000000}
+	\reglabel{Reset}\regnewline
+	\begin{regdesc}[1\textwidth]\begin{reglist}
+		\footnotesize
+		\item[COMPAREi] Holds the data for comparison to the counter register, \texttt{RFTIMER\_REG\_\_COUNTER}.
+	\end{reglist}\end{regdesc}	
+\end{register}
+	
+\begin{register}{H}{RFTIMER\_REG\_\_COMPAREi\_CONTROL}{0x42000030 + i*0x04}
+	\label{reg:rftimer-reg-comparei-control}
+	\regfield{RX\_STOP\_ENABLE}{1}{5}{0}
+	\regfield{RX\_START\_ENABLE}{1}{4}{0}
+	\regfield{TX\_SEND\_ENABLE}{1}{3}{0}
+	\regfield{TX\_LOAD\_ENABLE}{1}{2}{0}
+	\regfield{INTERRUPT\_ENABLE}{1}{1}{0}
+	\regfield{ENABLE}{1}{0}{0}
+	\reglabel{Reset}\regnewline
+	\begin{regdesc}[1\textwidth]\begin{reglist}
+		\footnotesize
+		\item[ENABLE] Compare unit enable. The value in the \texttt{RFTIMER\_REG\_\_COMPAREi} is compared to the value in \texttt{RFTIMER\_REG\_\_COUNTER} when enabled. 0 = compare unit disabled and 1 = compare unit enabled.
+		\item[INTERRUPT\_ENABLE] Interrupt enable. 0 = interrupt disabled and 1 = interrupt enabled.
+		\item[TX\_LOAD\_ENABLE] TX\_LOAD output trigger enable. 0 = trigger output disabled and 1 = trigger output enabled.
+		\item[TX\_SEND\_ENABLE] TX\_SEND output trigger enable. 0 = trigger output disabled and 1 = trigger output enabled.
+		\item[RX\_START\_ENABLE] RX\_START output trigger enable. 0 = trigger output disabled and 1 = trigger output enabled.
+		\item[RX\_STOP\_ENABLE] RX\_STOP output trigger enable. 0 = trigger output disabled and 1 = trigger output enabled.
+	\end{reglist}\end{regdesc}	
+\end{register}
+	
+\begin{register}{H}{RFTIMER\_REG\_\_CAPTUREi}{0x42000050 + i*0x04}
+	\label{reg:rftimer-reg-capturei}
+	\regfield{CAPTUREi}{32}{0}{00000000000000000000000000000000}
+	\reglabel{Reset}\regnewline
+	\begin{regdesc}[1\textwidth]\begin{reglist}
+		\footnotesize
+		\item[CAPTUREi] The counter register, \texttt{RFTIMER\_REG\_\_COUNTER}, is copied onto this register/field when a capture is triggered.
+	\end{reglist}\end{regdesc}	
+\end{register}
+	
+\begin{register}{H}{RFTIMER\_REG\_\_CAPTUREi\_CONTROL}{0x42000060 + i*0x04}
+	\label{reg:rftimer-reg-capturei-control}
+	\regfieldb{CLEAR}{1}{8}
+	\regfieldb{CAPTURE\_NOW}{1}{7}
+	\regfield{INPUT\_SEL\_RX\_DONE}{1}{6}{0}
+	\regfield{INPUT\_SEL\_RX\_SFD\_DONE}{1}{5}{0}
+	\regfield{INPUT\_SEL\_TX\_SEND\_DONE}{1}{4}{0}
+	\regfield{INPUT\_SEL\_TX\_SFD\_DONE}{1}{3}{0}
+	\regfield{INPUT\_SEL\_TX\_LOAD\_DONE}{1}{2}{0}
+	\regfield{INPUT\_SEL\_SOFTWARE}{1}{1}{0}
+	\regfield{INTERRUPT\_ENABLE}{1}{0}{0}
+	\reglabel{Reset}\regnewline
+	\begin{regdesc}[1\textwidth]\begin{reglist}
+		\footnotesize
+		\item[INTERRUPT\_ENABLE] Interrupt enable. 0 = interrupt disabled and 1 = interrupt enabled.
+		\item[INPUT\_SEL\_SOFTWARE] Software capture input select. 0 = input disabled and 1 = input enabled.
+		\item[INPUT\_SEL\_TX\_LOAD\_DONE] TX\_LOAD\_DONE capture input select. 0 = input disabled and 1 = input enabled.
+		\item[INPUT\_SEL\_TX\_SFD\_DONE] TX\_SFD\_DONE capture input select. 0 = input disabled and 1 = input enabled.
+		\item[INPUT\_SEL\_TX\_SEND\_DONE] TX\_SEND\_DONE capture input select. 0 = input disabled and 1 = input enabled.
+		\item[INPUT\_SEL\_RX\_SFD\_DONE] RX\_SFD\_DONE capture input select. 0 = input disabled and 1 = input enabled.
+		\item[INPUT\_SEL\_RX\_DONE] RX\_DONE capture input select. 0 = input disabled and 1 = input enabled.
+		\item[CAPTURE\_NOW] (Write-only) Triggers a capture event immediately. 0 = no capture and 1 = immediate capture.
+		\item[CLEAR] (Write-only) Clears the \texttt{RFTIMER\_REG\_\_CAPTUREi} register. 0 = no clear and 1 = clear.
+	\end{reglist}\end{regdesc}	
+\end{register}
+
+\begin{register}{H}{RFTIMER\_REG\_\_INT}{0x42000070}
+	\label{reg:rftimer-reg-int}
+	\regfield{CAPTURE3\_OVERFLOW}{1}{15}{0}
+	\regfield{CAPTURE2\_OVERFLOW}{1}{14}{0}
+	\regfield{CAPTURE1\_OVERFLOW}{1}{13}{0}
+	\regfield{CAPTURE0\_OVERFLOW}{1}{12}{0}
+	\regfield{CAPTURE3\_INT}{1}{11}{0}
+	\regfield{CAPTURE2\_INT}{1}{10}{0}
+	\regfield{CAPTURE1\_INT}{1}{9}{0}
+	\regfield{CAPTURE0\_INT}{1}{8}{0}
+	\regfield{COMPARE7\_INT}{1}{7}{0}
+	\regfield{COMPARE6\_INT}{1}{6}{0}
+	\regfield{COMPARE5\_INT}{1}{5}{0}
+	\regfield{COMPARE4\_INT}{1}{4}{0}
+	\regfield{COMPARE3\_INT}{1}{3}{0}
+	\regfield{COMPARE2\_INT}{1}{2}{0}
+	\regfield{COMPARE1\_INT}{1}{1}{0}
+	\regfield{COMPARE0\_INT}{1}{0}{0}
+	\reglabel{Reset}\regnewline
+	\begin{regdesc}[1\textwidth]\begin{reglist}
+		\footnotesize
+		\item[COMPARE0\_INT] Compare unit 0 interrupt flag. 0 = no interrupt pending and 1 = interrupt pending.
+		\item[COMPARE1\_INT] Compare unit 1 interrupt flag. 0 = no interrupt pending and 1 = interrupt pending.
+		\item[COMPARE2\_INT] Compare unit 2 interrupt flag. 0 = no interrupt pending and 1 = interrupt pending.
+		\item[COMPARE3\_INT] Compare unit 3 interrupt flag. 0 = no interrupt pending and 1 = interrupt pending.
+		\item[COMPARE4\_INT] Compare unit 4 interrupt flag. 0 = no interrupt pending and 1 = interrupt pending.
+		\item[COMPARE5\_INT] Compare unit 5 interrupt flag. 0 = no interrupt pending and 1 = interrupt pending.
+		\item[COMPARE6\_INT] Compare unit 6 interrupt flag. 0 = no interrupt pending and 1 = interrupt pending.
+		\item[COMPARE7\_INT] Compare unit 7 interrupt flag. 0 = no interrupt pending and 1 = interrupt pending.
+		\item[CAPTURE0\_INT] Capture unit 0 interrupt flag. 0 = no interrupt pending and 1 = interrupt pending.
+		\item[CAPTURE1\_INT] Capture unit 1 interrupt flag. 0 = no interrupt pending and 1 = interrupt pending.
+		\item[CAPTURE2\_INT] Capture unit 2 interrupt flag. 0 = no interrupt pending and 1 = interrupt pending.
+		\item[CAPTURE3\_INT] Capture unit 3 interrupt flag. 0 = no interrupt pending and 1 = interrupt pending.
+		\item[CAPTURE0\_OVERFLOW] Capture unit 0 overflow flag. 0 = no capture overflow occurred and 1 = capture overflow occurred.
+		\item[CAPTURE1\_OVERFLOW] Capture unit 1 overflow flag. 0 = no capture overflow occurred and 1 = capture overflow occurred.
+		\item[CAPTURE2\_OVERFLOW] Capture unit 2 overflow flag. 0 = no capture overflow occurred and 1 = capture overflow occurred.
+		\item[CAPTURE3\_OVERFLOW] Capture unit 3 overflow flag. 0 = no capture overflow occurred and 1 = capture overflow occurred.
+	\end{reglist}\end{regdesc}	
+\end{register}
+
+\begin{register}{H}{RFTIMER\_REG\_\_INT\_CLEAR}{0x42000074}
+	\label{reg:rftimer-reg-int-clear}
+	\regfieldb{CAPTURE3\_OVERFLOW\_CLEAR}{1}{15}
+	\regfieldb{CAPTURE2\_OVERFLOW\_CLEAR}{1}{14}
+	\regfieldb{CAPTURE1\_OVERFLOW\_CLEAR}{1}{13}
+	\regfieldb{CAPTURE0\_OVERFLOW\_CLEAR}{1}{12}
+	\regfieldb{CAPTURE3\_INT\_CLEAR}{1}{11}
+	\regfieldb{CAPTURE2\_INT\_CLEAR}{1}{10}
+	\regfieldb{CAPTURE1\_INT\_CLEAR}{1}{9}
+	\regfieldb{CAPTURE0\_INT\_CLEAR}{1}{8}
+	\regfieldb{COMPARE7\_INT\_CLEAR}{1}{7}
+	\regfieldb{COMPARE6\_INT\_CLEAR}{1}{6}
+	\regfieldb{COMPARE5\_INT\_CLEAR}{1}{5}
+	\regfieldb{COMPARE4\_INT\_CLEAR}{1}{4}
+	\regfieldb{COMPARE3\_INT\_CLEAR}{1}{3}
+	\regfieldb{COMPARE2\_INT\_CLEAR}{1}{2}
+	\regfieldb{COMPARE1\_INT\_CLEAR}{1}{1}
+	\regfieldb{COMPARE0\_INT\_CLEAR}{1}{0}
+	\regnewline
+	\begin{regdesc}[1\textwidth]\begin{reglist}
+		\footnotesize
+		\item[COMPARE0\_INT\_CLEAR] (Write-only) Compare unit 0 interrupt flag clear. 0 = flag unchanged and 1 = flag cleared.
+		\item[COMPARE1\_INT\_CLEAR] (Write-only) Compare unit 1 interrupt flag clear. 0 = flag unchanged and 1 = flag cleared.
+		\item[COMPARE2\_INT\_CLEAR] (Write-only) Compare unit 2 interrupt flag clear. 0 = flag unchanged and 1 = flag cleared.
+		\item[COMPARE3\_INT\_CLEAR] (Write-only) Compare unit 3 interrupt flag clear. 0 = flag unchanged and 1 = flag cleared.
+		\item[COMPARE4\_INT\_CLEAR] (Write-only) Compare unit 4 interrupt flag clear. 0 = flag unchanged and 1 = flag cleared.
+		\item[COMPARE5\_INT\_CLEAR] (Write-only) Compare unit 5 interrupt flag clear. 0 = flag unchanged and 1 = flag cleared.
+		\item[COMPARE6\_INT\_CLEAR] (Write-only) Compare unit 6 interrupt flag clear. 0 = flag unchanged and 1 = flag cleared.
+		\item[COMPARE7\_INT\_CLEAR] (Write-only) Compare unit 7 interrupt flag clear. 0 = flag unchanged and 1 = flag cleared.
+		\item[CAPTURE0\_INT\_CLEAR] (Write-only) Capture unit 0 interrupt flag clear. 0 = flag unchanged and 1 = flag cleared.
+		\item[CAPTURE1\_INT\_CLEAR] (Write-only) Capture unit 1 interrupt flag clear. 0 = flag unchanged and 1 = flag cleared.
+		\item[CAPTURE2\_INT\_CLEAR] (Write-only) Capture unit 2 interrupt flag clear. 0 = flag unchanged and 1 = flag cleared.
+		\item[CAPTURE3\_INT\_CLEAR] (Write-only) Capture unit 3 interrupt flag clear. 0 = flag unchanged and 1 = flag cleared.
+		\item[CAPTURE0\_OVERFLOW\_CLEAR] (Write-only) Capture unit 0 overflow flag clear. 0 = flag unchanged and 1 = flag cleared.
+		\item[CAPTURE1\_OVERFLOW\_CLEAR] (Write-only) Capture unit 1 overflow flag clear. 0 = flag unchanged and 1 = flag cleared.
+		\item[CAPTURE2\_OVERFLOW\_CLEAR] (Write-only) Capture unit 2 overflow flag clear. 0 = flag unchanged and 1 = flag cleared.
+		\item[CAPTURE3\_OVERFLOW\_CLEAR] (Write-only) Capture unit 3 overflow flag clear. 0 = flag unchanged and 1 = flag cleared.
+	\end{reglist}\end{regdesc}	
+\end{register}
+%</rftimer-registers>
+
+%<*uart-registers>
+\begin{register}{H}{UART\_REG\_\_TX\_DATA}{0x51000000}
+	\label{reg:uart-reg-tx-data}
+	\regfieldb{TX\_DATA}{8}{0}
+	\regnewline
+	\begin{regdesc}[1\textwidth]\begin{reglist}
+		\footnotesize
+		\item[TX\_DATA] (Write-only) Next UART symbol to write to the TX FIFO and transmit. Ignored if the FIFO is full.
+	\end{reglist}\end{regdesc}	
+\end{register}
+
+\begin{register}{H}{UART\_REG\_\_RX\_DATA}{0x51040000}
+	\label{reg:uart-reg-rx-data}
+	\regfield{RX\_DATA}{8}{0}{xxxxxxxx}
+	\reglabel{Reset}\regnewline
+	\begin{regdesc}[1\textwidth]\begin{reglist}
+		\footnotesize
+		\item[RX\_DATA] (Read-only) Next received UART symbol in the RX FIFO. Data is invalid if the FIFO is empty.
+	\end{reglist}\end{regdesc}	
+\end{register}
+%</uart-registers>
+
+%<*adc-registers>
+\begin{register}{H}{ADC\_REG\_\_START}{0x50000000}
+	\label{reg:adc-reg-start}
+	\regfield{conversion\_started}{1}{0}{0}
+	\reglabel{Reset}\regnewline
+	\begin{regdesc}[1\textwidth]\begin{reglist}
+		\footnotesize
+		\item[conversion\_started] Reading this bit indicates if a conversion is in progress. Writing a 1 to this bit begins a conversion if one is not already in progress. Writing a 0 to this bit has no effect.
+	\end{reglist}\end{regdesc}	
+\end{register}
+\begin{register}{H}{ADC\_REG\_\_DATA}{0x50040000}
+	\label{reg:adc-reg-data}
+	\regfield{converted\_data}{10}{0}{0000000000}
+	\reglabel{Reset}\regnewline
+	\begin{regdesc}[1\textwidth]\begin{reglist}
+		\footnotesize
+		\item[converted\_data] Converted ADC value.
+	\end{reglist}\end{regdesc}	
+\end{register}
+%</adc-registers>
+
+%<*analog-registers>
+\begin{register}{H}{ANALOG\_CFG\_REG\_\_0}{0x52000000}
+	\label{reg:analog-cfg-reg-0}
+	\regfield{config0}{16}{0}{0000000000000000}
+	\reglabel{Reset}\regnewline
+	\begin{regdesc}[1\textwidth]\begin{reglist}
+		\footnotesize
+		\item[config0] Configuration register 0 output voltage. For each bit, 0 = low/ground and 1 = high/vdd.
+	\end{reglist}\end{regdesc}	
+\end{register}
+%</analog-registers>
+
+%<*gpio-registers>
+\begin{register}{H}{APBGPIO\_REG\_\_INPUT}{0x53000000}
+	\label{reg:gpio-reg-input}
+	\regfield{gp\_in}{4}{0}{xxxx}
+	\reglabel{Reset}\regnewline
+	\begin{regdesc}[1\textwidth]\begin{reglist}
+		\footnotesize
+		\item[gp\_in] (Read-Only) Input voltage of the general-purpose inputs 0-3. For each bit, 0 = low/ground and 1 = high/vdd.
+	\end{reglist}\end{regdesc}	
+\end{register}
+
+\begin{register}{H}{APBGPIO\_REG\_\_OUTPUT}{0x53040000}
+	\label{reg:gpio-reg-output}
+	\regfield{gp\_out}{4}{0}{0000}
+	\reglabel{Reset}\regnewline
+	\begin{regdesc}[1\textwidth]\begin{reglist}
+		\footnotesize
+		\item[gp\_out] Output voltage for the general-purpose outputs 0-3. For each bit, 0 = low/ground and 1 = high/vdd.
+	\end{reglist}\end{regdesc}	
+\end{register}
+%</gpio-registers>

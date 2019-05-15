@@ -1,0 +1,82 @@
+\documentclass[12pt]{report}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\graphicspath{ {images/} }
+%\usepackage{fancyhdr}
+%\pagestyle{fancy}
+\usepackage[a4paper,width=150mm,top=25mm,bottom=25mm]{geometry}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{url}
+\usepackage{textcomp}
+\usepackage[backend=bibtex]{biblatex}
+\usepackage{csvsimple}
+\usepackage{longtable}
+\usepackage[T1]{fontenc}
+\usepackage{catchfilebetweentags}
+\usepackage{register}
+
+
+\lstset{
+	breaklines=true,
+	basicstyle=\ttfamily\scriptsize, %or \small or \footnotesize etc.
+	frame=shadowbox,	
+}
+
+\bibliography{references}
+
+\begin{document}
+
+\title{
+	{Design and User Guide for the Single Chip Mote Digital System}\\
+}
+\author{Sahar M. Mesri}
+\date{29 April 2016}
+
+\maketitle
+
+\chapter*{Abstract}
+\input{chapters/abstract}
+
+\chapter*{Acknowledgments}
+\input{chapters/acknowledgements}
+
+{\let\clearpage\relax \chapter*{Dedication}}
+\input{chapters/dedication}
+
+\tableofcontents
+
+\chapter{Introduction} \label{intro}
+\input{chapters/introduction}
+
+\chapter{Getting Started} \label{getting-started}
+\input{chapters/development_environment_setup}
+
+\chapter{Single Chip Mote Hardware} \label{hw}
+\input{chapters/hardware}
+
+\chapter{Single Chip Mote Software} \label{sw}
+\input{chapters/software}
+
+\chapter{Bootloader} \label{bootloading}
+\input{chapters/bootloader}
+
+\chapter{Testing} \label{testing}
+\input{chapters/testing}
+
+\chapter{Transitioning to ASIC} \label{transitioning-to-asic}
+\input{chapters/transitioning_to_asic}
+
+\chapter{Conclusion}
+\input{chapters/conclusion} \label{conclusion}
+
+\appendix
+\chapter{Appendix}
+\input{chapters/appendix}
+
+\printbibliography[heading=bibintoc] \label{bib}
+
+\end{document}
+
+% FIX ALL BAD BOX ERRORS
+
