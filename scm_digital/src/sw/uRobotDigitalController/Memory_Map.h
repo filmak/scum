@@ -66,11 +66,14 @@
 //UART Registers
 #define UART_REG__TX_DATA								*(unsigned int*)(APB_UART_BASE)
 #define UART_REG__RX_DATA								*(unsigned int*)(APB_UART_BASE)
-
+	
 //GPIO Registers
 #define GPIO_REG__INPUT									*(unsigned int*)(APB_GPIO_BASE + 0x000000)
+#define GPIO_REG__OUTPUT_PTR					  (unsigned int*)(APB_GPIO_BASE + 0x040000)
 #define GPIO_REG__OUTPUT								*(unsigned int*)(APB_GPIO_BASE + 0x040000)
-
+#define GPIO_REG__OUTPUT_PTR_2					(unsigned int*)(APB_GPIO_BASE + 0x080000)
+#define GPIO_REG__OUTPUT_2							*(unsigned int*)(APB_GPIO_BASE + 0x080000)
+	
 
 // Brad's Registers	
 #define ANALOG_CFG_REG__0               *(unsigned int*)(APB_ANALOG_CFG_BASE + 0x000000)
@@ -81,8 +84,6 @@
 #define ACFG_DIV__ADDR_2								*(unsigned int*)(APB_ANALOG_CFG_BASE + 0x00180000) // 
 #define ACFG_LO__ADDR										*(unsigned int*)(APB_ANALOG_CFG_BASE + 0x001C0000) // 
 #define ACFG_LO__ADDR_2									*(unsigned int*)(APB_ANALOG_CFG_BASE + 0x00200000) // has the LSB of the fine DAC and the BLE module control bits, so it probably needs to be monitored w/ a global
-
-#define ACFG_FIFO__ADDR									*(unsigned int*)(APB_ANALOG_CFG_BASE + 0x002C0000) // contains control bits for the arbitrary TX FIFO
 
 #define ASYNC_FIFO__ADDR								*(unsigned int*)(APB_ANALOG_CFG_BASE + 0x00680000) // LSB contains the "data ready" bit for the asynchronous FIFO, everything else is meaningless
 	

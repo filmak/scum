@@ -2,9 +2,19 @@
 #include "rf_global_vars.h"
 #include <stdio.h>
 #include "bucket_o_functions.h"
+#include "fixed-point.h"
 
 extern char send_packet[127];
 extern char recv_packet[130];
+
+extern double temp;
+double temp_sum = 0;
+int temp_counts = 0;
+double ratio;
+double LC_frequency;
+double frequency_per_LSB;
+double LSB_per_degree;
+int increments;
 
 int count_valid;
 int previous_count;
@@ -35,7 +45,7 @@ void UART_ISR(){
 	char inChar;
 	
 	inChar = UART_REG__RX_DATA;
-  buff[3] = buff[2];
+	buff[3] = buff[2];
 	buff[2] = buff[1];
 	buff[1] = buff[0];
 	buff[0] = inChar;
@@ -135,7 +145,7 @@ void UART_ISR(){
 			test_rachel_fifo();
 		}
 		else if ( (buff[3]=='a') && (buff[2]=='s') && (buff[1]=='y') && (buff[0]=='\n') ) {
-			//printf("BLE register: 0x%X\n",ASYNC_FIFO__ADDR);
+			printf("BLE register: 0x%X\n",ASYNC_FIFO__ADDR);
 		}
 		else if ( (buff[3]=='r') && (buff[2]=='b') && (buff[1]=='t') && (buff[0]=='\n') ) {
 			resetBLE();
@@ -175,13 +185,12 @@ void UART_ISR(){
 		else if ( (buff[3]=='l') && (buff[2]=='c') && (buff[1]=='t') && (buff[0]=='\n') ) {
 			enable_32k();
 			set_2M_RC_frequency(31);
-			divProgram(480,1,1);
+			divProgram(20,1,1);
 			tx_gpio_ctrl(0,0);
 			LC_monotonic(0,21,131);
 			enable_PA_ASC();
 			disable_polyphase_ASC();
-			set_LO_supply(31); // used to make the supply voltages the same on every chip
-			set_LC_current(63);
+			//set_LO_supply(31); // used to make the supply voltages the same on every chip
 			analog_scan_chain_write(&ASC[0]);
 			analog_scan_chain_load();
 			count_valid = 0;
@@ -189,7 +198,7 @@ void UART_ISR(){
 			RFTIMER_REG__CONTROL = 0x7;
 			RFTIMER_REG__MAX_COUNT = 0x0003D090;
 			RFTIMER_REG__COMPARE0 = 0x0003D090;
-			RFTIMER_REG__COMPARE0_CONTROL   = 0x03;
+			RFTIMER_REG__COMPARE0_CONTROL = 0x03;
 		
 			// Reset all counters
 			ANALOG_CFG_REG__0 = 0x0000;
@@ -237,8 +246,8 @@ void UART_ISR(){
 			count_valid = 0;
 		
 			RFTIMER_REG__CONTROL = 0x7;
-			RFTIMER_REG__MAX_COUNT = 0x017D7840;
-			RFTIMER_REG__COMPARE4 = 0x017D7840;
+			RFTIMER_REG__MAX_COUNT = 0x0003D090;
+			RFTIMER_REG__COMPARE4 = 0x0003D090;
 			RFTIMER_REG__COMPARE4_CONTROL   = 0x03;
 		
 			// Reset all counters
@@ -359,11 +368,11 @@ void UART_ISR(){
 		
 		else if ( (buff[3]=='l') && (buff[2]=='c') && (buff[1]=='p') && (buff[0]=='\n') ) {
 			int kk;
-			for (kk=0; kk<31; kk+=1) {
+			for (kk=0; kk<15; kk+=1) {
 				printf("%d\n",cnt_val[kk]);
 				}
 		}
-		else if ( (buff[3]='l') && (buff[2]=='c') && (buff[1]=='q') && (buff[0]=='\n') ) {
+		else if ( (buff[3]=='l') && (buff[2]=='c') && (buff[1]=='q') && (buff[0]=='\n') ) {
 			printf("%d\n",cnt_val[0]);
 			printf("%d\n",cnt_val[1]);
 		}
@@ -414,9 +423,9 @@ void RFTIMER_ISR() {
 	unsigned int count_LC, count_2M, count_32k;
 	//unsigned int count_LC;
 	unsigned int interrupt = RFTIMER_REG__INT;
-	end_val = 31;
-	//end_test_process = 100;
-		
+	end_val = 15;
+	end_test_process = 100;
+			
 	if (interrupt & 0x00000001) {
 		// This code does the simple "monotonic-by-modulo" sweeps
 		// It works ok. Not great, just ok.
@@ -429,15 +438,14 @@ void RFTIMER_ISR() {
 			
 		if(count_valid >= end_val) {
 			count_valid = end_val;
+			printf("count_LC: %d\n", count_LC);
 			printf("DONE\n");
 			RFTIMER_REG__COMPARE0_CONTROL = 0x00;
 		}
 			
 		if (count_valid < end_val) {
 			//LC_monotonic(count_valid, 23, 144); // works well for ok1 in transmit; pretty well for ok1 in receive
-			//LC_monotonic(count_valid, 21, 130);
-			//LC_monotonic(count_valid, 31, 961);
-			LC_FREQCHANGE(14,0,0);
+			LC_monotonic(count_valid*100, 21, 130);
 			count_valid++; // for all other sweeps
 		}
 		
@@ -527,13 +535,156 @@ void RFTIMER_ISR() {
 		}
 	} //printf("COMPARE3 MATCH\n");
 	if (interrupt & 0x00000010) {
-		
-		read_counters(&count_2M,&count_LC,&count_32k);
+				
+		read_counters(&count_2M, &count_LC, &count_32k);
 		cnt_val[0] = count_2M;
 		cnt_val[1] = count_32k;
+				
+		ratio = fix_double(fix_div(fix_init(count_2M), fix_init(count_32k)));
+		temp = -31.41 * ratio + 1893.87 - 20;
+		
+		// printf("count_2M: %d, count_32k: %d, temp: %lf\n", count_2M, count_32k, temp);
+		printf("count_2M: %d\n", count_2M);
+		printf("count_32k: %d\n", count_32k);
+		printf("count_LC: %d\n", count_LC);
+		// printf("temp: %.2f\n", temp);
+		
+		// LC_frequency = -196185.9212 * temp + 2352980673.4913;
+		// printf("LC frequency: %lf\n", LC_frequency);
+		
+		temp_sum += temp;
+		temp_counts++;
 		
 		printf("DONE LF CNT\n");
 		RFTIMER_REG__COMPARE4_CONTROL = 0x00;
+		
+		printf("%d\n", temp_counts);
+		
+		if (temp_counts < 10) {
+
+			count_valid = 0;
+			
+			RFTIMER_REG__CONTROL = 0x7;
+			RFTIMER_REG__MAX_COUNT = 0x0003D090;
+			RFTIMER_REG__COMPARE4 = 0x0003D090;
+			RFTIMER_REG__COMPARE4_CONTROL = 0x03;
+
+			// Reset all counters
+			ANALOG_CFG_REG__0 = 0x0000;
+
+			// Enable all counters
+			ANALOG_CFG_REG__0 = 0x3FFF;
+			
+		} else if (temp_counts == 10) {
+			
+			// Reset scan chain for transmitting packet
+			// Cortex tunes frequency
+			ASC[0] = 0x7F8002FF;   //0-31
+			ASC[1] = 0xFFE03020;   //32-63
+			ASC[2] = 0x20202000;   //64-95
+			ASC[3] = 0x00160006;   //96-127
+			ASC[4] = 0x48000000;   //128-159
+			ASC[5] = 0x00000000;   //160-191
+			ASC[6] = 0x00003000;   //192-223
+			ASC[7] = 0x00034333;   //224-255
+			ASC[8] = 0x3060FFFF;   //256-287
+			ASC[9] = 0xE3FFFFFF;   //288-319
+			ASC[10] = 0xFF0A0060;   //320-351
+			ASC[11] = 0x013F4081;   //352-383
+			ASC[12] = 0x027F9F06;   //384-415
+			ASC[13] = 0x07608044;   //416-447
+			ASC[14] = 0x600280FF;   //448-479
+			ASC[15] = 0xFBF01B01;   //480-511
+			ASC[16] = 0xC8000000;   //512-543
+			ASC[17] = 0x00000000;   //544-575
+			ASC[18] = 0x00000000;   //576-607
+			ASC[19] = 0x00000000;   //608-639
+			ASC[20] = 0x00000000;   //640-671
+			ASC[21] = 0x00000000;   //672-703
+			ASC[22] = 0x00000000;   //704-735
+			ASC[23] = 0x20000000;   //736-767
+			ASC[24] = 0x00007CFC;   //768-799
+			ASC[25] = 0x20000018;   //800-831
+			ASC[26] = 0x02800000;   //832-863
+			ASC[27] = 0x00000000;   //864-895
+			ASC[28] = 0x00000800;   //896-927
+			ASC[29] = 0x08002092;   //928-959
+			ASC[30] = 0xA0000003;   //960-991
+			ASC[31] = 0xF7000805;   //992-1023
+			ASC[32] = 0x7060A07F;   //1024-1055
+			ASC[33] = 0x09E4B0C4;   //1056-1087
+			ASC[34] = 0x7FF70000;   //1088-1119
+			ASC[35] = 0x00000000;   //1120-1151
+			ASC[36] = 0x00000000;   //1152-1183
+			ASC[37] = 0x00000000;
+
+			// Scan chain tunes frequency
+			/*ASC[0] = 0x7F8002FF;   //0-31
+			ASC[1] = 0xFFE03020;   //32-63
+			ASC[2] = 0x20202000;   //64-95
+			ASC[3] = 0x00160006;   //96-127
+			ASC[4] = 0x48000000;   //128-159
+			ASC[5] = 0x00000000;   //160-191
+			ASC[6] = 0x00003000;   //192-223
+			ASC[7] = 0x00034333;   //224-255
+			ASC[8] = 0x3060FFFF;   //256-287
+			ASC[9] = 0xE3FFFFFF;   //288-319
+			ASC[10] = 0xFF0A0060;   //320-351
+			ASC[11] = 0x013F4081;   //352-383
+			ASC[12] = 0x027F9F06;   //384-415
+			ASC[13] = 0x07608044;   //416-447
+			ASC[14] = 0x600280FF;   //448-479
+			ASC[15] = 0xFBF01B01;   //480-511
+			ASC[16] = 0xC8000000;   //512-543
+			ASC[17] = 0x00000000;   //544-575
+			ASC[18] = 0x00000000;   //576-607
+			ASC[19] = 0x00000000;   //608-639
+			ASC[20] = 0x00000000;   //640-671
+			ASC[21] = 0x00000000;   //672-703
+			ASC[22] = 0x00000000;   //704-735
+			ASC[23] = 0x20000000;   //736-767
+			ASC[24] = 0x00007CFC;   //768-799
+			ASC[25] = 0x20000018;   //800-831
+			ASC[26] = 0x02800000;   //832-863
+			ASC[27] = 0x00000000;   //864-895
+			ASC[28] = 0x00000800;   //896-927
+			ASC[29] = 0x08002092;   //928-959
+			ASC[30] = 0xA8000003;   //960-991
+			ASC[31] = 0xF7000805;   //992-1023
+			ASC[32] = 0x7060A07F;   //1024-1055
+			ASC[33] = 0x09E4B0C4;   //1056-1087
+			ASC[34] = 0x7FF70000;   //1088-1119
+			ASC[35] = 0x00000000;   //1120-1151
+			ASC[36] = 0x00000000;   //1152-1183
+			ASC[37] = 0x00000000;*/
+			
+			/*
+			increments = (2402000000.0 - LC_frequency) / (20 * temp + 88000);
+			LC_monotonic(600, 21, 131);
+			// LC_monotonic(increments, 21, 131);
+			printf("Increments: %d\n", increments);
+			*/
+			
+			/*
+			 * Frequency per degree Celsius = -196185.9212
+			 * Frequency per LSB = 130000
+			 * LSB per degree Celsius = -1.5
+			 * Current: LSB = 599, temp = 15.7
+			 */ 
+			// frequency_per_LSB = -150.1 * temp + 183865;
+			// LSB_per_degree = fix_double(fix_div(fix_init(-196186), fix_init((int) frequency_per_LSB)));
+			// increments = 599 + LSB_per_degree * (temp - 15.7);
+			
+			increments = -0.2519 * (temp_sum / temp_counts) + 338.980 - 2;
+			LC_monotonic(increments, 21, 131);
+			printf("Increments: %d\n", increments);
+			
+			analog_scan_chain_write(&ASC[0]);
+			analog_scan_chain_load();
+			
+			temp_counts = 0;
+			temp_sum = 0;
+		}
 
 	}	//printf("COMPARE4 MATCH\n");
 	

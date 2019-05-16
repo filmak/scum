@@ -23,8 +23,6 @@ void tx_gpio_ctrl(char LO, char PA);
 void GPO_control(unsigned char row1, unsigned char row2, unsigned char row3, unsigned char row4);
 void GPI_control(char row1, char row2, char row3, char row4);
 
-void gen_test_ble_pkt(void);
-
 void LC_FREQCHANGE(int coarse, int mid, int fine);
 void LC_monotonic(int LCcode, int mid_divs, int coarse_divs);
 
@@ -49,9 +47,6 @@ void enable_ble_module(void);
 void disable_ble_module(void);
 void gen_test_ble_packet(unsigned char *packet);
 void transmit_ble_packet_rachel(unsigned char *packet);
-
-void tx_arb_fifo(unsigned char *packet);
-
 void test_ble_packet_loop(void);
 void test_rachel_fifo(void);
 

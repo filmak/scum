@@ -1,7 +1,0 @@
-void LC_FREQCHANGE(char coarse, char mid, char fine);
-void LC_monotonic(int LCcode);
-
-unsigned char flipChar(unsigned char b);
-void gen_ble_packet(unsigned char *packet, unsigned char *AdvA, double tempC);
-void test_ble_packet(void);
-

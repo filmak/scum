@@ -14,11 +14,9 @@ const unsigned char PDU_HEADER1 = 0x40;
 const unsigned char PDU_HEADER2 = 0x60;
 
 const unsigned int PACKET_LENGTH = 16;
-const unsigned int PDU_LENGTH = 8; // pdu is 15 bytes long
+const unsigned int PDU_LENGTH = 8; // pdu is 8 bytes long
 const unsigned int ADVA_LENGTH = 6; // adv address is 6 bytes long
 const unsigned int CRC_LENGTH = 3; // crc is 3 bytes long
-
-extern unsigned char ble_pkt[28];
 
 // -----------------------------------------------
 // scan chain initialization and programming functions
@@ -425,7 +423,6 @@ void tx_gpio_ctrl(char LO, char PA) {
 
 
 
-
 // -----------------------------------------------
 // assorted functions
 // -----------------------------------------------
@@ -487,15 +484,17 @@ void LC_monotonic(int LC_code, int mid_divs, int coarse_divs){
 	int coarse1, coarse2, coarse3;
 	
 	mid1=0; mid2=0; mid3=0; fine1=0; fine2=0; fine3=0; coarse1=0; coarse2=0; coarse3=0;
-		
-	coarse1 = (((LC_code/coarse_divs + 14) & 0x000000FF));
+	
+	//int coarse_divs = 131;
+	//int mid_divs = 21;
+	
+	coarse1 = (((LC_code/coarse_divs + 19) & 0x000000FF));
 	LC_code_temp = LC_code % coarse_divs;
-	//mid1 = ((((LC_code_temp/mid_divs)*3) & 0x000000FF));
-	mid1 = (((LC_code_temp/mid_divs)) & 0x000000FF);
+	mid1 = ((((LC_code_temp/mid_divs)*3) & 0x000000FF));
 	fine1 = (((LC_code_temp % mid_divs) & 0x000000FF));
 	
 	if (LC_code >= coarse_divs*4) {
-		fine1 = 0; mid1 = 0; coarse1 = 14+4;
+		fine1 = 0; mid1 = 0; coarse1 = 19+4;
 		LC_code = LC_code - coarse_divs*4;
 		mid_divs++;
 		coarse_divs += 6;
@@ -660,41 +659,9 @@ void read_counters(unsigned int* count_2M, unsigned int* count_LC, unsigned int*
 
 
 
-
 // -----------------------------------------------
 // some BLE packet assembly and debugging functions
 // -----------------------------------------------
-	
-void gen_test_ble_pkt() {
-	ble_pkt[0] = 0x1D;
-	ble_pkt[1] = 0x55;
-	ble_pkt[2] = 0xAD;
-	ble_pkt[3] = 0xF6;
-	ble_pkt[4] = 0x45;
-	ble_pkt[5] = 0xC7;
-	ble_pkt[6] = 0xC5;
-	ble_pkt[7] = 0x0E;
-	ble_pkt[8] = 0x26;
-	ble_pkt[9] = 0x13;
-	ble_pkt[10] = 0xC2;
-	ble_pkt[11] = 0xAC;
-	ble_pkt[12] = 0x98;
-	ble_pkt[13] = 0x37;
-	ble_pkt[14] = 0xB8;
-	ble_pkt[15] = 0x30;
-	ble_pkt[16] = 0xA1;
-	ble_pkt[17] = 0xC9;
-	ble_pkt[18] = 0xE4;
-	ble_pkt[19] = 0x93;
-	ble_pkt[20] = 0x75;
-	ble_pkt[21] = 0xB7;
-	ble_pkt[22] = 0x41;
-	ble_pkt[23] = 0x6C;
-	ble_pkt[24] = 0xD1;
-	ble_pkt[25] = 0x2D;
-	ble_pkt[26] = 0xB8;
-	ble_pkt[27] = 0x00;
-}
 
 void resetBLE() {
 	// function that hard resets the GFSK module and BLE asynchronous FIFO
@@ -1014,57 +981,6 @@ void transmit_ble_packet_rachel(unsigned char *packet) {
 		
 }
 
-void tx_arb_fifo(unsigned char *packet) {
-	// Initialize Variables
-	int i;												// used to loop through the bytes
-	int j;												// used to loop through the 8 bits of each individual byte
-	
-	unsigned char current_byte;   // temporary variable used to get through each byte at a time
-	unsigned char current_bit;		// temporary variable to put the current bit into the GPIO
-	unsigned int fifo_ctrl_reg = 0x00000000; // local storage for analog CFG register 
-
-	// Prepare FIFO for loading
-	fifo_ctrl_reg |= 0x00000001;  // raise LSB - data in valid
-	fifo_ctrl_reg &= 0xFFFFFFFB;  // lower 3rd bit - data out ready
-	fifo_ctrl_reg &= 0xFFFFFFDF;  // lower clock select bit to clock in from Cortex
-	
-	ACFG_FIFO__ADDR = fifo_ctrl_reg; // load in the configuration settings
-	
-	// Load packet into FIFO
-	for (i = 0; i < 32; i++) {
-		current_byte = *packet;     // put a byte into the temporary storage
-		packet++;
-		
-		for (j = 7; j >= 0; j--) {
-			//current_bit = ((current_byte<<(j-1))&0x80)>>7;
-			current_bit = (current_byte >> j) & 0x1;
-			
-			if (current_bit == 0) {
-				fifo_ctrl_reg &= 0xFFFFFFFD;
-				ACFG_FIFO__ADDR = fifo_ctrl_reg;
-			}
-			if (current_bit == 1) {
-				fifo_ctrl_reg |= 0x00000002;
-				ACFG_FIFO__ADDR = fifo_ctrl_reg;
-			}
-			
-			fifo_ctrl_reg |= 0x00000008;
-			ACFG_FIFO__ADDR = fifo_ctrl_reg;
-			fifo_ctrl_reg &= 0xFFFFFFF7;
-			ACFG_FIFO__ADDR = fifo_ctrl_reg; // toggl the clock!
-		}
-	}
-	
-	// Release data from FIFO
-	fifo_ctrl_reg |= 0x00000010; // enable div-by-2
-	fifo_ctrl_reg &= 0xFFFFFFFE; // lower data in valid (set FIFO to output mode)
-	fifo_ctrl_reg |= 0x00000004; // raise data out ready (set FIFO to output mode)
-	fifo_ctrl_reg |= 0x00000020; // set choose clk to 1
-	
-	ACFG_FIFO__ADDR = fifo_ctrl_reg;
-}
-
-
 void spec_test() {
 	// initialize looping variables
 	unsigned int gpio_status = GPIO_REG__INPUT;		// sample current GPIO status register
@@ -1074,7 +990,7 @@ void spec_test() {
 	
 	while(1) {
 		for (j = 0; j < 7;) {
-			data_ready = ACFG_FIFO__ADDR & 0x00000001;
+			data_ready = ASYNC_FIFO__ADDR & 0x00000001;
 			if (data_ready == 1) {
 				//ACFG_LO__ADDR_2 = (unsigned int)((((~current_byte<<j)&0x80)>>3))|0xFFFFFFF7;
 				ACFG_LO__ADDR_2 = (unsigned int)((((0x55<<j)&0x80)>>3))|0xFFFFFFEF;
